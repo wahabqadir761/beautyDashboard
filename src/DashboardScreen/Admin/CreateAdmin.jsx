@@ -17,11 +17,11 @@ const CreateAdmin = () => {
   const [disable, setdisable] = useState(false);
   let navigate = useNavigate()
 
-  const checker = (e) => {
-    settext(e);
-    setModel({ ...model, isAdmin: e });
-    // setmyPassord()
-  };
+    // const checker = (e) => {
+    //   settext(e);
+    //   setModel({ ...model, isAdmin: e });
+    //   // setmyPassord()
+    // };
   const handleChangePassword = () => {
     if (showpassword) {
       setshowpassword(false)
@@ -30,7 +30,7 @@ const CreateAdmin = () => {
     }
   }
 
-  const countryphonenumbercode = [
+  const countrycode = [
     "+1", // United States
     "+44", // United Kingdom
     "+92", // Pakistan
@@ -176,6 +176,7 @@ const CreateAdmin = () => {
   const senddata = () => {  
     if (validateForm()) {
       setdisable(true);
+      console.log(model,"model")
       Post('/admin/registeradmin', model)
         .then((res) => {
           console.log('API response:', res);
@@ -260,10 +261,10 @@ const CreateAdmin = () => {
                 <div className="d-flex">
                   <select
                     className="form-control w-25"
-                    defaultValue={model.countryphonenumbercode}
-                    onChange={(e) => setModel({ ...model, countryphonenumbercode: e.target.value })}
+                    defaultValue={model?.countrycode}
+                    onChange={(e) => setModel({ ...model, countrycode: e.target.value })}
                   >
-                    {countryphonenumbercode.map((item, index) => (
+                    {countrycode.map((item, index) => (
                       <option key={index} value={item}>
                         {item}
                       </option>
