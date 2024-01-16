@@ -4,6 +4,12 @@ let apiHandle = axios.create({
   baseURL: "http://192.168.18.125:3005/api/",
 });
 
+const imageurl = (endpoint) => {
+  return {
+    imageURL: `http://192.168.18.125:3005/uploads/${endpoint}`
+  };
+};
+
 
 let Get = (endPoint) => {
   return apiHandle.get(endPoint);
@@ -25,7 +31,7 @@ let GetName = (endPoint, usertype, token) => {
   });
 };
 
-let Post = (endPoint, body) => {
+let Post = (endPoint, body, token) => {
   return apiHandle.post(`${endPoint}`, body, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -52,4 +58,4 @@ let Delete = (endPoint, id, token) => {
 };
 
 
-export { Get, Post, Put, Delete, GetName, GetList };
+export { Get, Post, Put, Delete, GetName, GetList ,imageurl };

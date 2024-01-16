@@ -69,11 +69,9 @@ const FAQsList = () => {
 
     const token = localStorage.getItem("token")
     const GetData = () => {
-        console.log("Fetching FAQs...");
         Get(`getFaqs`)
             .then((res) => {
                 setData(res.data.data);
-                console.log("FAQs Data:", res.data.data);
             })
             .catch((e) => console.error("Error fetching FAQs:", e));
     }
@@ -145,7 +143,7 @@ const FAQsList = () => {
         <>
             <div>
                 <MainHeader />
-                <Header screenTitle="FAQs List" />
+                <Header screenTitle="Faqs List" />
                 <ToastContainer />
                 <Box>
                     <AddButton path="/dashboard/EditFAQs" />
@@ -213,7 +211,6 @@ const FAQsList = () => {
                                             <tr key={key} className='table_img tablerow'>
                                                 {cols.map((x, i) => (<>
                                                     <td style={{ verticalAlign: 'middle' }} key={i}>
-                                                        {console.log(item.userid?.name)}
                                                         {x.displayFeild ? (
                                                             x.displayFeild(item)
                                                         ) : x.img ? (

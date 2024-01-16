@@ -173,8 +173,7 @@ const CreateAdmin = () => {
     return isValid;
   };
 
-  const senddata = () => {
-    console.log('Entering senddata');
+  const senddata = () => {  
     if (validateForm()) {
       setdisable(true);
       Post('/admin/registeradmin', model)

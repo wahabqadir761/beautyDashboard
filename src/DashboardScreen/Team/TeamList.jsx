@@ -1,87 +1,67 @@
 import { Skeleton } from 'antd'
-// import AddButton from '../../Components/AddButton'
+import { Box } from '@mui/material'
 import { ToastContainer } from 'react-toastify'
 import { toast } from 'react-toastify'
 import Header from '../../Components/Header'
 import MainHeader from '../../Components/MainHeader'
-import ViewButton from '../../Components/ViewButton'
-import { Delete, GetList, GetName } from '../../Config/ApiHandling'
+import { Delete, Get, GetName, imageurl } from '../../Config/ApiHandling'
 import Swal from 'sweetalert2'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Pagination from '../../Components/Pagination'
 import DeleteButton from '../../Components/DeleteButton'
 import EditButton from '../../Components/EditButton'
-import { Button, Modal } from 'react-bootstrap';
+import AddButton from '../../Components/AddButton'
 
 
 
-const PartnerList = () => {
+const TeamList = () => {
     let [data, setData] = useState([])
-    let [detail, setDetail] = useState([])
     let [flag, setflag] = useState(false)
-    const [showModal, setShowModal] = useState(false);
-    const [userDetails, setUserDetails] = useState(null);
+    let navigation = useNavigate()
     const [currentpage, setcurrentpage] = useState(1);
     const [postperpge, setpostperpge] = useState(10);
     let navigate = useNavigate()
-
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
-
-    const handleShowModal = (userData) => {
-        setUserDetails(userData);
-        setShowModal(true);
-    };
-
-    const fetchPartnerDetails = (userId, item) => {
-        setDetail(data.filter((partner) => partner._id === userId));
-        setShowModal(true);
-    };
-
-
+    
     let cols = [
         {
-            name: "Name",
-            key: "fullname"
+            name: "Title",
+            key: "name"
         },
         {
-            name: "Email",
-            key: "email"
-        },
-        {
-            name: "Number",
-            key: "phonenumber"
-        },
-        {
-            name: "Message",
-            key: "message"
+            name: "Image",
+            key: "images",
+            displayFeild: (item) => (
+                <>
+                    <div>
+                    <img className='img-fluid w-25' src={`${imageurl(item.images).imageURL}`} alt="" />
+
+                    </div>
+                </>
+            ),
+            
         },
         {
             name: "Action",
             displayFeild: (item) => (
                 <>
-                    {/* <EditButton text="Partner Details" click={() => fetchPartnerDetails(item._id)} /> */}
-                    <DeleteButton text="Delete" click={() => DeleteMessage(item._id)} />
+                    <div style={{ display: "flex" }}>
+                        <EditButton text="Edit" click={() => edit(item)} />
+                        <DeleteButton text="Delete" click={() => DeleteFAQs(item._id)} />
+                    </div>
                 </>
             ),
         },
-    ]   
+    ]
 
     const token = localStorage.getItem("token")
     const GetData = () => {
-      
-        GetList(`getcontacts`, token)  // Assuming your API endpoint is 'api/getcontacts'
+        Get(`getteam`)
             .then((res) => {
                 setData(res.data.data);
-                console.log(res.data.data);
-                let setedData = res?.data?.data?.flatMap((x, i) => x.userid);
-                console.log(setedData);
             })
-            .catch((e) => console.log(e));
-    };
+            .catch((e) => console.error("Error:", e));
+    }
 
 
     useEffect(() => {
@@ -89,7 +69,15 @@ const PartnerList = () => {
     }, [])
 
 
-    let DeleteMessage = (e) => {
+
+    let edit = (item) => {
+        navigation("/dashboard/EditTeam", {
+            state: item
+        });
+    }
+
+
+    let DeleteFAQs = (e) => {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -101,7 +89,7 @@ const PartnerList = () => {
         })
             ?.then((result) => {
                 if (result.isConfirmed) {
-                    Delete("deletecontact", e, token)
+                    Delete("deleteteam", e, token)
                         ?.then((res) => {
                             GetData()
                         })
@@ -142,44 +130,12 @@ const PartnerList = () => {
         <>
             <div>
                 <MainHeader />
-                <Header screenTitle="Contact List" />
+                <Header screenTitle="Team List" />
                 <ToastContainer />
+                <Box>
+                    <AddButton path="/dashboard/EditTeam" />
+                </Box>
                 <>
-                    <Modal
-                        show={showModal}
-                        onHide={handleCloseModal}
-                        centered
-                        backdrop="static"
-                        keyboard={false}
-                        dialogClassName="custom-modal"
-                    >
-                        <Modal.Header closeButton>
-                            <Modal.Title>User Details</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            {detail && (
-                                <>
-                                    <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-                                        <h5>First Name: </h5> <p>{detail[0]?.fullname}</p>
-                                    </div>
-                                    <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-                                        <h5>Email: </h5> <p>{detail[0]?.email}</p>
-                                    </div>
-                                    <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-                                        <h5>Phone Number: </h5> <p>{detail[0]?.phonenumber}</p>
-                                    </div>
-                                </>
-                            )}
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="dark" onClick={handleCloseModal}>
-                                Close
-                            </Button>
-                            {/* Add additional buttons or actions if needed */}
-                        </Modal.Footer>
-                    </Modal>
-
-
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         {data ? (
                             data.length === 0 ? (
@@ -257,11 +213,8 @@ const PartnerList = () => {
                                                             // x.key == "gender" ? item.userid?.gender ?item.userid?.gender === "undefined"?"Not Selected": item.userid?.gender :"Not Selected": x.key == "email" ? item.userid?.email : null
 
                                                             (x.key === 'amount' || x.key === 'price') ? `$${item[x.key]}` :
-                                                                x.key === "message" ? item?.message :
-                                                                    //   x.key === "gender" ? item?.gender ? item?.gender === "undefined" ? "Not Selected" : item?.gender : "Not Selected" :
-                                                                    x.key === "email" ? item?.email :
-                                                                        x.key === "phonenumber" ? item?.phonenumber :
-                                                                            x.key === "fullname" ? item?.fullname : null
+                                                                x.key === "name" ? item?.name :
+                                                                            x.key === "images" ? item?.images : null
                                                         )}
                                                     </td>
                                                 </>))}
@@ -281,4 +234,4 @@ const PartnerList = () => {
     )
 }
 
-export default PartnerList
+export default TeamList

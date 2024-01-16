@@ -19,7 +19,6 @@ const EditAdmin = () => {
   },[])
 
   let sendData = () =>{
-    console.log(putdata)
     if (!model.firstname) {
       toast.error('Name is required');
       return;
@@ -50,7 +49,6 @@ const EditAdmin = () => {
     Put("/admin/updateadmin", model._id, body)  
       .then((res) => {
         // Handle success if needed
-        console.log(res);
         toast.success('Admin updated successfully');
         navigation("/dashboard/adminList");
       })

@@ -20,46 +20,72 @@ const Login = () => {
 
   const loginButton = () => {
     if (!model.email) {
-      toast.error('Email is required');
+      toast.error('Email Requierd', {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       return
     }
     if (!model.password) {
-      toast.error('Password is required');
+      toast.error('Password Requierd', {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       return
     }
     setOpen(true)
-    axios.post(`http://192.168.18.125:3005/api/admin/login`, model)
+    Post("admin/login", model)
       .then((succ) => {
-        setOpen(false)
-
-        console.log(succ?.data.data.token)
-        localStorage.setItem("token", succ?.data?.data?.token)
-        if (succ?.data.data.token) {
-
-          navig("dashboard")
-        } else {
-          setOpen(false)
+        setOpen(false);
+        let token = succ.data.data.token;
+        localStorage.setItem("token", token);
+        localStorage.setItem("islogin", true);
+        if (succ.data.data.user.isAdmin) {
         }
+        navig("/dashboard");
       })
+
       .catch((err) => {
-        setOpen(false)
-      })
-    //   if (error && error.response && error.response.data) {
-    //     const { status, data, message } = error.response.data;
-    //     if (status === false && data === null && message) {
-    //       toast.error(`Error: ${message}`, {
-    //         position: "top-right",
-    //         autoClose: 3000, // Close the toast after 5 seconds
-    //         hideProgressBar: false,
-    //         closeOnClick: true,
-    //         draggable: true,
-    //         progress: undefined,
-    //         // Add more options as needed
-    //       });
-    //       return;
-    //     }
-    //   }
-    //   toast.error('An error occurred');
+        setOpen(false);
+        console.error("Login Error:", err.response); // Log the error response for debugging
+
+        if (err.response && err.response.status === 401 && err.response.data.message === "Password does not match") {
+          toast.error("Incorrect email or password. Please try again.", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error("Authentication Failed. Please check your email and password.", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+
 
   }
 
@@ -68,8 +94,8 @@ const Login = () => {
       <Box sx={{ width: { md: '400px', sm: '350px', xs: '100%', margin: "135px auto", borderRadius: "20px", display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#CECECE", opacity: "60%" }, height: { md: '450px', sm: '350px', xs: '70%' } }} className='shadow'>
         <Box >
           {/* {open ?  
-              <BsNoti  />
-            : null} */}
+                <BsNoti  />
+              : null} */}
           <ToastContainer />
           <div className="login-head">
             <img src={loginImg1} alt="" />

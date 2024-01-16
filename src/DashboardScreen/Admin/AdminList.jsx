@@ -126,7 +126,7 @@ return (
                 {/* <Button type="primary" onClick={() => edit(e)}>edit</Button> */}
                 <EditButton text="Edit" click={() => edit(e)} />
                 {/* <Button className='mx-2' type="primary" danger onClick={() => Delete(e)}>Delete</Button> */}
-                <DeleteButton text="Delete" click={() => DeleteRow(item._id)} />
+                <DeleteButton text="Delete" click={() => DeleteRow(e._id)} />
               </>
             )
           },

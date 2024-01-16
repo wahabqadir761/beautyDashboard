@@ -36,10 +36,10 @@ function SubMainDashboard() {
     return (
         <div>
             <MainHeader />
-            <div style={{ width: "95%" }} className=' m-auto'>
+            <div style={{ width: "95%",  backgroundColor: "#212529", color: "white" }} className=' m-auto'>
                 <Box className="d-flex shadow py-2 px-3 align-items-center  my-3 justify-content-between">
                     <Box className='d-flex '>
-                        <h6 className='pt-1'>
+                        <h6 className='pt-1 header-title'>
                             Admin
                         </h6>
                     </Box>

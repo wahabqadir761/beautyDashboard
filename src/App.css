@@ -28,6 +28,10 @@
   font-family: 'Niconne', 'cursive';
 }
 
+.header-title{
+  font-family: 'Niconne', 'cursive' !important;
+}
+
 .tablerow{
   font-family: 'Poppins', 'cursive';
 }

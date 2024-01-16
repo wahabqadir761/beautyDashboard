@@ -243,7 +243,6 @@ const PartnerList = () => {
                                             <tr key={key} className='table_img tablerow'>
                                                 {cols.map((x, i) => (<>
                                                     <td style={{ verticalAlign: 'middle' }} key={i}>
-                                                        {console.log(item.userid?.name)}
                                                         {x.displayFeild ? (
                                                             x.displayFeild(item)
                                                         ) : x.img ? (
